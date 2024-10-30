@@ -5,35 +5,13 @@ import { CreateCarDto, UpdateCarDto } from './dto';
 
 @Injectable()
 export class CarsService {
-  private cars: Car[] = [
-    {
-      id: uuid(),
-      brand: 'Toyota',
-      model: 'Corolla',
-      price: 10000,
-      year: 2018,
-    },
-    {
-      id: uuid(),
-      brand: 'BMW',
-      model: 'X5',
-      price: 20000,
-      year: 2019,
-    },
-    {
-      id: uuid(),
-      brand: 'Mercedes',
-      model: 'C-Class',
-      price: 15000,
-      year: 2017,
-    },
-  ];
+  private cars: Car[] = [];
 
-  public getAllCars() {
+  getAllCars() {
     return this.cars;
   }
 
-  public getCarById(id: string) {
+  getCarById(id: string) {
     const car = this.cars.find((car) => car.id === id);
 
     if (!car) throw new NotFoundException(`Car with id ${id} not found`);
@@ -41,14 +19,14 @@ export class CarsService {
     return car;
   }
 
-  public createCar(createCarDto: CreateCarDto) {
+  createCar(createCarDto: CreateCarDto) {
     const newCar = { id: uuid(), ...createCarDto };
     this.cars.push(newCar);
 
     return newCar;
   }
 
-  public updateCar(id: string, updateCarDto: UpdateCarDto) {
+  updateCar(id: string, updateCarDto: UpdateCarDto) {
     if (updateCarDto.id && updateCarDto.id !== id) {
       throw new NotFoundException(`Car with id ${updateCarDto.id} not found`);
     }
@@ -60,8 +38,12 @@ export class CarsService {
     return car;
   }
 
-  public deleteCar(id: string) {
+  deleteCar(id: string) {
     const car = this.getCarById(id);
     this.cars = this.cars.filter((car) => car.id !== id);
+  }
+
+  fillCarsWithSeedData(cars: Car[]) {
+    this.cars = cars;
   }
 }
